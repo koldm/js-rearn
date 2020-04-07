@@ -1,5 +1,6 @@
 var Calc = (function () {
 	
+	//why there is inner function?
 	var Calc = function (props) {
 		this.options = props.options;
 		this.iconShow = '<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.108 1.814L1.568 7.354L0.861004 6.646L7.108 0.400004L13.354 6.646L12.646 7.354L7.108 1.814Z" fill="black"/></svg>';
