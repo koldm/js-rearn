@@ -1,9 +1,15 @@
+// используй классы
+// не использую одинаковые переменные
+// подключи eslint c правилами от recomened rules или от airnnb: он подкажет большую часть проблем с code style
+// const ? 
 var Calc = (function () {
-	
+	// const ? 
 	var Calc = function (props) {
 		this.options = props.options;
+		// иконки вынести в класс констант. А лучше: в html и использовать по svg id
 		this.iconShow = '<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.108 1.814L1.568 7.354L0.861004 6.646L7.108 0.400004L13.354 6.646L12.646 7.354L7.108 1.814Z" fill="black"/></svg>';
 		this.iconHide = '<svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.892 6.186L12.432 0.645996L13.139 1.354L6.892 7.6L0.645996 1.354L1.354 0.645996L6.892 6.186Z" fill="black"/></svg>';
+		// вынести селекторы в константы (здесь и везде)
 		this.carCost = new Slider('#car-cost', {});
 		this.anInitialFee = new Slider('#an-initial-fee', {});
 		this.leaseTerm = new Slider('#lease-term', {});
@@ -15,10 +21,12 @@ var Calc = (function () {
 		var el = document.getElementById('calc-item__icon');
 		
 		if (el !== null) {
-			if (type == 'hide')
+			if (type == 'hide') // вкусовщина: ставь всегда {}
+				// использовать вышеобъявленный el
 				document.getElementById('calc-item__icon').innerHTML = this.iconHide;
 			
 			if (type == 'show')
+				// использовать вышеобъявленный el
 				document.getElementById('calc-item__icon').innerHTML = this.iconShow;
 		}
 		
@@ -37,7 +45,9 @@ var Calc = (function () {
 	
 	// получаем данные по авто
 	Calc.prototype.getActiveCar = function () {
+		// нет проверки на существование value (можно написать свой lodash.get)
 		var getId = document.getElementsByClassName('calc-item')[0].dataset.value.replace(/[^+\d]/g, '');
+		// использую find, если нужен 1 элемент
 		return this.options.filter(el => el.id == getId)[0];
 	}
 	
@@ -80,6 +90,8 @@ var Calc = (function () {
 		var text = item.dataset.text;
 		var price = +item.value;
 		
+		// всегда используй строгое сравнение. Конкретно здесь - не важно. 
+		// Используq template strings `${this.carCost.getValue().toLocaleString('ru')} ${text}`
 		if (id == 'car-cost') item.value = this.carCost.getValue().toLocaleString('ru') + ' ' + text;
 		if (id == 'an-initial-fee') item.value = this.anInitialFee.getValue().toLocaleString('ru') + ' ' + text;
 		
@@ -120,6 +132,7 @@ var Calc = (function () {
 	Calc.prototype.graduation = function (number) {
 		var result = '';
 
+		//  выглядит ужасно
 		switch (number.toString().length) {
 			case 1:
 			case 2:
@@ -129,6 +142,7 @@ var Calc = (function () {
 			case 4:
 			case 5:
 			case 6:
+				// round10 можно вынести в класс Utils
 				result = this.round10(number / 1000).toString().replace('.', ',') + ' тыс';
 				break;
 			default:
@@ -195,6 +209,7 @@ var Calc = (function () {
 	//добытия для input
 	Calc.prototype.events = function () {
 		var inputs = document.querySelectorAll('input[class="calculator__input"');
+		// события можно делегировать родителю, а не назначать всем input'ам отдельно
 		inputs.forEach((input) => {
 			
 			input.addEventListener('focus', (e) => {
@@ -270,6 +285,7 @@ var Calc = (function () {
 		this.setInitialFee(true); // меняем подписи под input в первоначальном взносе
 		this.calculate(); // калькулятор
 		
+		// лучше использовать addEventListener 
 		document.getElementById('month-pay-minus').onclick = () => {
 			this.checkMonth('minus'); // кнопка в ежемесячном платеже
 		};
